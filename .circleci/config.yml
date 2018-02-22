@@ -5,13 +5,24 @@ jobs:
       # specify the version you desire here
       - image: circleci/node:7.10
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
 
     working_directory: ~/repo
 
     steps:
       - checkout
       - run: npm install
+      - setup_remote_docker:
+                docker_layer_caching: true
+      - run:
+                name: Install Docker client
+                command: |
+                  set -x
+                  VER="17.03.0-ce"
+                  curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+                  tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+                  mv /tmp/docker/* /usr/bin
+      - run: |
+                TAG=0.1.$CIRCLE_BUILD_NUM
+                docker build -t   zaliyev/node-web-app:$TAG .
+                docker login -u zaliyev -p 8575833Aa
+                docker push zaliyev/node-web-app:$TAG
