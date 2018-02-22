@@ -13,8 +13,10 @@ jobs:
       - run: npm install
       - setup_remote_docker:
                 docker_layer_caching: true
-      - run: |
+      - run:
+          name: Build and dush Docker
+          command: |
                 TAG=0.1.$CIRCLE_BUILD_NUM
-                docker build -t   zaliyev/node-web-app:$TAG .
+                docker build -t zaliyev/node-web-app .
                 docker login -u zaliyev -p 8575833Aa
-                docker push zaliyev/node-web-app:$TAG
+                docker push zaliyev/node-web-app
