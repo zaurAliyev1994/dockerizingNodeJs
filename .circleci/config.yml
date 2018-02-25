@@ -44,7 +44,6 @@ jobs:
                 "name": "%s",
                 "image": "%s.dkr.ecr.us-east-1.amazonaws.com/%s:%s",
                 "essential": true,
-                "memoryReservation": null,
                 "portMappings": [
                   {
                     "containerPort": 8080,
