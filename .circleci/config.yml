@@ -36,7 +36,6 @@ jobs:
                name: Python version
                command: |
                  sudo apt-get update && apt-get install -y python-pip libpython-dev
-                 python -V
      - run:
           name: Install dependencies
           command: |
