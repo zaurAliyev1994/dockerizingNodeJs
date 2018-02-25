@@ -36,7 +36,7 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt-get install python-pip
-            pip install awscli==1.14.45
+            sudo pip install awscli==1.14.45
 
      - run:
           name: Build application Docker image
