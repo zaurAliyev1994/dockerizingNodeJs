@@ -35,11 +35,11 @@ jobs:
      - run:
                name: Python version
                command: |
+                 sudo apt-get install python3-pip
                  python3 -V
      - run:
           name: Install dependencies
           command: |
-            sudo apt-get install python3-pip
             sudo pip install awscli==1.14.45
 
      - run:
