@@ -22,6 +22,10 @@
 #                docker push zaliyev/node-web-app
 # docker tag app $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE
 #             docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE
+#CLUSTER='docker-cluster'
+#            DOCKER_IMAGE='docker-repo'
+#            TASK='test-app'
+#            SERVICE='app-service'
 
 version: 2
 jobs:
@@ -51,11 +55,6 @@ jobs:
      - deploy:
           name: Push application Docker image
           command: |
-            CLUSTER='docker-cluster'
-            FAMILY='test-app'
-            DOCKER_IMAGE='docker-repo'
-            TASK='test-app'
-            SERVICE='app-service'
             aws configure set region $AWS_REGION
             aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
             aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
