@@ -35,12 +35,12 @@ jobs:
      - run:
                name: Python version
                command: |
-                 sudo apt-get install python-pip
+                 sudo apt-get update && apt-get install -y python-pip libpython-dev
                  python -V
      - run:
           name: Install dependencies
           command: |
-            sudo pip install awscli==1.14.45
+            sudo pip install awscli
 
      - run:
           name: Build application Docker image
