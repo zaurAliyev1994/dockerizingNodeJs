@@ -1,26 +1,3 @@
-#version: 2
-#jobs:
-#  build:
-#    docker:
-#    specify the version you desire here
-#      - image: circleci/node:7.10
-#
-#
-#    working_directory: ~/repo
-#
-#    steps:
-#      - checkout
-#      - run: npm install
-#      - setup_remote_docker:
-#                docker_layer_caching: true
-#      - run:
-#          name: Build and push Docker
-#          command: |
-#                TAG=0.1.$CIRCLE_BUILD_NUM
-#                docker build -t zaliyev/node-web-app .
-#                docker login -u zaliyev -p 8575833Aa
-#                docker push zaliyev/node-web-app
-
 version: 2
 jobs:
   build:
@@ -51,11 +28,33 @@ jobs:
           command: |
             CLUSTER='docker-cluster'
             DOCKER_IMAGE='docker-repo'
-            TASK='test-app'
-            SERVICE='app-service'
+            TASK='docker-container-latest'
+            SERVICE='docker-service'
+            TAG='latest'
+            FAMILY='task-docker-latest'
             aws configure set region $AWS_REGION
             aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
             aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
             $(aws ecr get-login --no-include-email --region $AWS_REGION)
             docker tag app $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE
             docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE
+
+            task_template='[
+              {
+                "name": "%s",
+                "image": "%s.dkr.ecr.us-east-1.amazonaws.com/%s:%s",
+                "essential": true,
+                "memoryReservation": null,
+                "portMappings": [
+                  {
+                    "containerPort": 8080,
+                    "hostPort": 80
+                  }
+                ]
+              }
+            ]'
+            echo "$task_template"
+            task_def=$(printf "$task_template" $TASK $AWS_ACCOUNT_ID $DOCKER_IMAGE $TAG)
+            json=$(aws ecs register-task-definition --container-definitions "$task_def" --family "$FAMILY")
+            revision=$(echo "$json" | grep -o '"revision": [0-9]*' | grep -Eo '[0-9]+')
+            aws ecs update-service --cluster "$CLUSTER" --service "$SERVICE" --task-definition "$TASK":"$revision"
