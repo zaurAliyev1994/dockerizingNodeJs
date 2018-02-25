@@ -35,8 +35,8 @@ jobs:
      - run:
                name: Python version
                command: |
-                 sudo apt-get install python3-pip
-                 python3 -V
+                 sudo apt-get install python-pip
+                 python -V
      - run:
           name: Install dependencies
           command: |
