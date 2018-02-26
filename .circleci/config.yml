@@ -29,7 +29,9 @@ jobs:
             docker build -t app .
      - deploy:
           name: Push application Docker image
-          command: sudo ./deploy.sh
+          command: |
+            chmod +x deploy.sh
+            ./deploy.sh
 
 #          |
 #            CLUSTER='trashy-cluster-2'
