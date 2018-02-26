@@ -18,7 +18,7 @@ deploy_cluster() {
     FAMILY='trashy-task-2'
     make_task_def
     register_definition
-    if [[ $(aws ecs update-service --cluster $CLUSTER --service sample-webapp-service --task-definition $revision | \
+    if [[ $(aws ecs update-service --cluster $CLUSTER --service $SERVICE --task-definition $revision | \
                    $JQ '.service.taskDefinition') != $revision ]]; then
         echo "Error updating service."
         return 1
