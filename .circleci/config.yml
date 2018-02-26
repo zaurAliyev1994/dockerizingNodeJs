@@ -23,16 +23,22 @@ jobs:
           command: |
             sudo pip install awscli
             aws --version
+            chmod +x deploy.sh
+
      - run:
           name: Build application Docker image
           command: |
             docker build -t app .
-     - deploy:
-          name: Push application Docker image
-          command: |
-            chmod +x deploy.sh
-            ./deploy.sh
+  - deployment:
+     prod:
+       branch: master
+       commands:
+        - ./deploy.sh
 
+#          name: Push application Docker image
+#                command: |
+#                    chmod +x deploy.sh
+#                    ./deploy.sh
 #          |
 #            CLUSTER='trashy-cluster-2'
 #            DOCKER_IMAGE='docker-repo'
