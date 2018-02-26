@@ -27,14 +27,6 @@ jobs:
           name: Build application Docker image
           command: |
             docker build -t app .
-     - run:
-               name: Install ecs-cli
-               command: |
-                 sudo curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest
-                 echo "$(curl -s https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest.md5) /usr/local/bin/ecs-cli" | md5sum -c -
-                 sudo chmod +x /usr/local/bin/ecs-cli
-                 ecs-cli --version
-
      - deploy:
           name: Push application Docker image
           command: |
@@ -51,23 +43,21 @@ jobs:
             docker tag app $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE
             docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE
 
-            ecs-cli pull --registry-id $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE:latest
-#            task_template='[
-#              {
-#                "name": "%s",
-#                "image": "%s.dkr.ecr.us-east-1.amazonaws.com/%s:%s",
-#                "essential": true,
-#                "memory": 128,
-#                "portMappings": [
-#                  {
-#                    "containerPort": 8080,
-#                    "hostPort": 80
-#                  }
-#                ]
-#              }
-#            ]'
-#            echo "$task_template"
-#            task_def=$(printf "$task_template" $TASK $AWS_ACCOUNT_ID $DOCKER_IMAGE $TAG)
-#            json=$(aws ecs register-task-definition --container-definitions "$task_def" --family "$FAMILY")
-#            revision=$(echo "$json" | grep -o '"revision": [0-9]*' | grep -Eo '[0-9]+')
-#            aws ecs update-service --cluster "$CLUSTER" --service "$SERVICE" --task-definition "trashy-task-2:$revision"
+            task_template='[
+              {
+                "name": "%s",
+                "image": "%s.dkr.ecr.us-east-1.amazonaws.com/%s:%s",
+                "essential": true,
+                "memory": 128,
+                "portMappings": [
+                  {
+                    "containerPort": 8080,
+                    "hostPort": 80
+                  }
+                ]
+              }
+            ]'
+            echo "$task_template"
+            task_def=$(printf "$task_template" $TASK $AWS_ACCOUNT_ID $DOCKER_IMAGE $TAG)
+            aws ecs register-task-definition --container-definitions "$task_def" --family "$FAMILY"
+            aws ecs update-service --cluster "$CLUSTER" --service "$SERVICE" --task-definition "trashy-task-2"
