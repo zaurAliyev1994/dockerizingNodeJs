@@ -34,11 +34,9 @@ deploy_cluster() {
             sleep 5
         else
             echo "Deployed!"
-            return 0
         fi
     done
     echo "Service update took too long."
-    return 1
 }
 
 make_task_def(){
