@@ -29,11 +29,11 @@ jobs:
           name: Build application Docker image
           command: |
             docker build -t app .
-  - deployment:
-     prod:
-       branch: master
-       commands:
-        - ./deploy.sh
+     - deployment:
+        prod:
+          branch: master
+          commands:
+            - ./deploy.sh
 
 #          name: Push application Docker image
 #                command: |
