@@ -18,7 +18,6 @@ jobs:
      - run:
         name: Creating Dummy Artifacts
         command: |
-             mkdir /tmp
              cp -r coverage/lcov-report/dockerizingNodeJs/* /tmp
      - store_artifacts:
          path: /tmp
