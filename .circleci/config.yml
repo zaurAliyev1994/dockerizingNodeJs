@@ -4,8 +4,6 @@ general:
     only:
      - master
      - istanbuljs
-
-
 jobs:
   build:
     working_directory: ~/repo
@@ -16,8 +14,31 @@ jobs:
      - run: npm install
      - run: npm test
      - run:
-        name: Creating Dummy Artifacts
-        command: |
-             cp -r coverage/lcov-report/* /tmp
+         name: Creating Dummy Artifacts
+         command: |
+            cp -r coverage/lcov-report/* /tmp
      - store_artifacts:
-         path: /tmp
+        path: /tmp
+
+     - setup_remote_docker:
+        docker_layer_caching: true
+
+     - run:
+          name: Python install
+          command: |
+            sudo apt-get update && sudo apt-get install -y python-pip libpython-dev
+            python -V
+     - run:
+          name: Install aws-cli
+          command: |
+            sudo pip install awscli
+            aws --version
+     - run:
+          name: Build application Docker image
+          command: |
+            docker build -t app .
+     - deploy:
+           name: Deploy app
+           command: |
+              chmod +x deploy.sh
+              ./deploy.sh
