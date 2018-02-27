@@ -21,4 +21,4 @@ jobs:
              mkdir /tmp/coverage
              sudo cp -r coverage/* /tmp/coverage
      - store_artifacts:
-         path: /tmp/coverage
+         path: /tmp/coverage/lcov-report/*
