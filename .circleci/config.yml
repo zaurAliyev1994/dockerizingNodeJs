@@ -18,7 +18,7 @@ jobs:
      - run:
         name: Creating Dummy Artifacts
         command: |
-             mkdir /tmp/coverage;;
+             mkdir /tmp/coverage
              cp coverage.* /tmp/coverage
      - store_artifacts:
          path: /tmp/coverage
