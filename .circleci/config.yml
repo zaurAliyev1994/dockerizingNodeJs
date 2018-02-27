@@ -19,6 +19,6 @@ jobs:
         name: Creating Dummy Artifacts
         command: |
              mkdir /tmp/coverage
-             cp -r coverage/lcov-report/* /tmp
+             cp coverage/* /tmp/coverage
      - store_artifacts:
-         path: /tmp
+         path: /tmp/coverage
