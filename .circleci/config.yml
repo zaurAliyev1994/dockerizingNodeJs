@@ -1,8 +1,13 @@
 version: 2
 general:
+  artifacts:
+     - coverage
   branches:
     only:
      - master
+     - istanbuljs
+
+
 jobs:
   build:
     working_directory: ~/repo
@@ -11,24 +16,4 @@ jobs:
     steps:
      - checkout
      - run: npm install
-     - setup_remote_docker:
-        docker_layer_caching: true
-     - run:
-               name: Python version
-               command: |
-                 sudo apt-get update && sudo apt-get install -y python-pip libpython-dev
-                 python -V
-     - run:
-          name: Install dependencies
-          command: |
-            sudo pip install awscli
-            aws --version
-     - run:
-          name: Build application Docker image
-          command: |
-            docker build -t app .
-     - deploy:
-           name: Push application Docker image
-           command: |
-              chmod +x deploy.sh
-              ./deploy.sh
+     - run: npm test
