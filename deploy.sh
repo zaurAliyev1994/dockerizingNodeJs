@@ -7,10 +7,6 @@ TASK='trashy-task-2'
 SERVICE='trashy-service'
 TAG='latest'
 FAMILY='trashy-task-2'
-AWS_ACCESS_KEY_ID='AKIAJTXQBWDC6VSNY6AQ'
-AWS_SECRET_ACCESS_KEY='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'
-AWS_REGION='eu-central-1'
-AWS_ACCOUNT_ID='132868288379'
 aws configure set region $AWS_REGION
 aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
 aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
@@ -33,11 +29,8 @@ task_template='[
     ]
   }
 ]'
-echo $task_template
 task_def=$(printf "$task_template" $TASK $AWS_ACCOUNT_ID $DOCKER_IMAGE $TAG)
-echo "START REGISTER TASK DEFFFFFFFFFFFFFFF"
 aws ecs register-task-definition --container-definitions "$task_def" --family $FAMILY
-echo "START UPDATE SERVICEEEEEEEEEEEEEEEE"
 aws ecs update-service --cluster $CLUSTER --service $SERVICE --task-definition trashy-task-2
 
 RUNNING_TASK=$(aws ecs list-tasks --cluster trashy-cluster | jq -r '.taskArns | .[0]')
