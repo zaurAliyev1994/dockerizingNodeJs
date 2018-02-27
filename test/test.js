@@ -10,9 +10,9 @@ describe('Calculator Tests', function() {
         done();
     });
 
-    /*it('returns 2*2=4', function(done) {
+    it('returns 2*2=4', function(done) {
         assert.equal(calc.mul(2, 2), 4);
         // Invoke done when the test is complete.
         done();
-    });*/
+    });
 });
