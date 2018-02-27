@@ -23,51 +23,12 @@ jobs:
           command: |
             sudo pip install awscli
             aws --version
-            chmod +x deploy.sh
-
      - run:
           name: Build application Docker image
           command: |
             docker build -t app .
-     - deployment:
-        prod:
-          branch: master
-          commands:
-            - ./deploy.sh
-
-#          name: Push application Docker image
-#                command: |
-#                    chmod +x deploy.sh
-#                    ./deploy.sh
-#          |
-#            CLUSTER='trashy-cluster-2'
-#            DOCKER_IMAGE='docker-repo'
-#            TASK='trashy-task-2'
-#            SERVICE='trashy-service-2'
-#            TAG='latest'
-#            FAMILY='trashy-task-2'
-#            aws configure set region $AWS_REGION
-#            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-#            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-#            $(aws ecr get-login --no-include-email --region $AWS_REGION)
-#            docker tag app $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE
-#            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE
-#
-#            task_template='[
-#              {
-#                "name": "%s",
-#                "image": "%s.dkr.ecr.us-east-1.amazonaws.com/%s:%s",
-#                "essential": true,
-#                "memory": 128,
-#                "portMappings": [
-#                  {
-#                    "containerPort": 8080,
-#                    "hostPort": 80
-#                  }
-#                ]
-#              }
-#            ]'
-#            echo "$task_template"
-#            task_def=$(printf "$task_template" $TASK $AWS_ACCOUNT_ID $DOCKER_IMAGE $TAG)
-#            aws ecs register-task-definition --container-definitions "$task_def" --family "$FAMILY"
-#            aws ecs update-service --cluster "$CLUSTER" --service "$SERVICE" --task-definition "trashy-task-2"
+  - deploy:
+      name: Push application Docker image
+      command: |
+          chmod +x deploy.sh
+          ./deploy.sh
