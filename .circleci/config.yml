@@ -1,7 +1,7 @@
 version: 2
 general:
   artifacts:
-     - ./coverage/lcov-report
+     - coverage/lcov-report
   branches:
     only:
      - master
